@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - 'develop'
+    paths-ignore:
+      - '**/**-prod.yml'
+      - '**/**-prod.sh'
+      - '**/**-prod'
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
