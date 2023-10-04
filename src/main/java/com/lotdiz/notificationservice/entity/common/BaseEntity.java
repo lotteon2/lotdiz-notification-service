@@ -1,4 +1,4 @@
-package com.lotdiz.notificationservice.entity;
+package com.lotdiz.notificationservice.entity.common;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;

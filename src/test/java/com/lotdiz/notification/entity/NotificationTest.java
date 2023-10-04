@@ -1,4 +1,4 @@
-package com.lotdiz.notification;
+package com.lotdiz.notification.entity;
 
 import com.lotdiz.notificationservice.NotificationServiceApplication;
 import com.lotdiz.notificationservice.entity.Notification;
@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ContextConfiguration(classes = NotificationServiceApplication.class)
-public class NotificationServiceTest {
+@Transactional
+public class NotificationTest {
   Logger log = Logger.getLogger("notification");
   @Autowired private EntityManager em;
 

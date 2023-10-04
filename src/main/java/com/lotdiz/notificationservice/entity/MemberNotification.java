@@ -1,31 +1,29 @@
 package com.lotdiz.notificationservice.entity;
 
+import com.lotdiz.notificationservice.entity.common.BaseEntity;
+import com.lotdiz.notificationservice.entity.id.MemberNotificationId;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * EmbeddedId 로 복합키임을 정의
+ *
+ * <p>select 시 id.memberId, id.notification.id 로 조회(MemberNotificationTest 에 insert, select 테스트 구성)
+ */
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberNotification extends BaseEntity {
-  @Id
-  @Column(name = "member_id", nullable = false)
-  private Long memberId;
+  @EmbeddedId private MemberNotificationId id;
 
   @Column(name = "member_notification_is_read", nullable = false)
   private Boolean memberNotificationIsRead;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "notification_id")
-  private Notification notification;
 }
