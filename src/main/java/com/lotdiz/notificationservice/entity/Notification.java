@@ -1,5 +1,6 @@
 package com.lotdiz.notificationservice.entity;
 
+import com.lotdiz.notificationservice.entity.common.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
