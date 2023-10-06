@@ -23,3 +23,26 @@ eureka:
       defaultZone: http://discovery-service:8761/eureka
   instance:
     instance-id: ${spring.application.name}:${server.port}
+
+cloud:
+  aws:
+    credentials:
+      ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    sqs:
+      delivery-status-notification-queue:
+        name: LotdizDeliveryStartNotificationQueue-prod.fifo
+        url: ${AWS_SQS_ENDPOINT}/LotdizDeliveryStartNotificationQueue-prod.fifo
+      project-due-date-notification-queue:
+        name: LotdizProjectDueDateNotificationQueue-prod
+        url: ${AWS_SQS_ENDPOINT}/LotdizProjectDueDateNotificationQueue-prod
+      project-funding-rate-fail-notification-queue:
+        name: LotdizProjectFundingRateFailNotificationQueue-prod
+        url: ${AWS_SQS_ENDPOINT}/LotdizProjectFundingRateFailNotificationQueue-prod
+      project-funding-amount-complete-notification-queue:
+        name: LotdizProjectFundingAmountCompleteNotificationQueue-prod
+        url: ${AWS_SQS_ENDPOINT}/LotdizProjectFundingAmountCompleteNotificationQueue-prod
