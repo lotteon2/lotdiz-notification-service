@@ -1,11 +1,7 @@
 package com.lotdiz.notificationservice.entity;
 
 import com.lotdiz.notificationservice.entity.common.BaseEntity;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

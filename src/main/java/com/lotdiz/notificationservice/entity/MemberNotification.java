@@ -24,6 +24,10 @@ import lombok.NoArgsConstructor;
 public class MemberNotification extends BaseEntity {
   @EmbeddedId private MemberNotificationId id;
 
-  @Column(name = "member_notification_is_read", nullable = false)
-  private Boolean memberNotificationIsRead;
+  @Builder.Default
+  @Column(
+      name = "member_notification_is_read",
+      nullable = false,
+      columnDefinition = "boolean default false")
+  private Boolean memberNotificationIsRead = false;
 }
