@@ -15,7 +15,7 @@ public class UnreadNotificationService {
    * @param memberId 사용자 id
    * @return Long
    */
-  public Long numberOfUnreadNotifications(Long memberId) {
-    return memberNotificationRepository.unreadNotificationCount(memberId);
+  public Long getNumberOfUnreadNotifications(Long memberId) {
+    return memberNotificationRepository.getUnreadNotificationCount(memberId);
   }
 }

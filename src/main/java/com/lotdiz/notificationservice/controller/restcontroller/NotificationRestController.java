@@ -18,7 +18,7 @@ public class NotificationRestController {
   public ResponseEntity<SuccessResponse> numberOfUnreadNotifications() {
     Long memberId = 1L;
     Long numberOfUnreadNotifications =
-        unreadNotificationService.numberOfUnreadNotifications(memberId);
+        unreadNotificationService.getNumberOfUnreadNotifications(memberId);
     return ResponseEntity.ok()
         .body(
             SuccessResponse.builder()
