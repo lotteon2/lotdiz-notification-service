@@ -1,6 +1,7 @@
 package com.lotdiz.notificationservice.entity;
 
 import com.lotdiz.notificationservice.entity.common.BaseEntity;
+import java.util.List;
 import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,13 @@ public class Notification extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "notification_id")
   private Long id;
+
+  @OneToMany(
+      mappedBy = "id.notification",
+      fetch = FetchType.LAZY,
+      cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+      orphanRemoval = true)
+  private List<MemberNotification> memberNotifications;
 
   @Column(name = "notification_title", nullable = false)
   private String notificationTitle;
