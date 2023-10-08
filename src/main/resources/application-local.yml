@@ -59,7 +59,9 @@ cloud:
       project-funding-amount-complete-notification-queue:
         name: LotdizProjectFundingAmountCompleteNotificationQueue
         url: ${AWS_SQS_ENDPOINT}/LotdizProjectFundingAmountCompleteNotificationQueue
-
+      delivery-start-notification-queue:
+        name: delivery-start-notification-queue.fifo
+        url: ${AWS_SQS_ENDPOINT}/delivery-start-notification-queue.fifo
 logging:
   level:
     org:
