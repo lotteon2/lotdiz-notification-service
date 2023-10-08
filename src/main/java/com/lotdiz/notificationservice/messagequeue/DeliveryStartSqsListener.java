@@ -1,6 +1,8 @@
 package com.lotdiz.notificationservice.messagequeue;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lotdiz.notificationservice.dto.request.DeliveryStartNotificationRequestDto;
 import com.lotdiz.notificationservice.service.NotificationService;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,12 @@ public class DeliveryStartSqsListener {
       value = "${cloud.aws.sqs.delivery-start-notification-queue.name}",
       deletionPolicy = SqsMessageDeletionPolicy.NEVER)
   public void createDeliveryStartNotification(
-      @Payload String message, @Headers Map<String, String> headers, Acknowledgment ack) {
+      @Payload String message, @Headers Map<String, String> headers, Acknowledgment ack)
+      throws JsonProcessingException {
     log.info("receive from DeliveryStartSqsListener message={}", message);
-
+    DeliveryStartNotificationRequestDto deliveryStartNotificationRequestDto =
+        objectMapper.readValue(message, DeliveryStartNotificationRequestDto.class);
+    notificationService.createDeliveryStartNotification(deliveryStartNotificationRequestDto);
 
     ack.acknowledge();
   }

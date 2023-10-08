@@ -2,10 +2,12 @@ package com.lotdiz.notificationservice.service;
 
 import com.lotdiz.notificationservice.dto.CreateProjectDueDateNotificationRequestDto;
 import com.lotdiz.notificationservice.dto.CreateProjectFundingRateFailNotificationRequestDto;
+import com.lotdiz.notificationservice.dto.request.DeliveryStartNotificationRequestDto;
 import com.lotdiz.notificationservice.entity.MemberNotification;
 import com.lotdiz.notificationservice.entity.Notification;
 import com.lotdiz.notificationservice.entity.id.MemberNotificationId;
 import com.lotdiz.notificationservice.repository.MemberNotificationJdbcRepository;
+import com.lotdiz.notificationservice.repository.MemberNotificationRepository;
 import com.lotdiz.notificationservice.repository.NotificationRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class NotificationService {
 
   private final NotificationRepository notificationRepository;
+  private final MemberNotificationRepository memberNotificationRepository;
   private final MemberNotificationJdbcRepository memberNotificationJdbcRepository;
 
   @Transactional
@@ -80,5 +83,30 @@ public class NotificationService {
             .collect(Collectors.toList());
 
     memberNotificationJdbcRepository.batchInsert(memberNotifications);
+  }
+
+  @Transactional
+  public void createDeliveryStartNotification(
+      DeliveryStartNotificationRequestDto deliveryStartNotificationRequestDto) {
+    Notification notification =
+        Notification.builder()
+            .notificationTitle("배송 시작 알림")
+            .notificationContent(
+                String.format(
+                    "%s 님의 %s 프로젝트 배송이 시작되었습니다!",
+                    deliveryStartNotificationRequestDto.getMemberName(),
+                    deliveryStartNotificationRequestDto.getProjectName()))
+            .build();
+    Notification savedNotification = notificationRepository.save(notification);
+
+    MemberNotification memberNotification =
+        MemberNotification.builder()
+            .id(
+                MemberNotificationId.builder()
+                    .memberId(deliveryStartNotificationRequestDto.getMemberId())
+                    .notification(savedNotification)
+                    .build())
+            .build();
+    memberNotificationRepository.save(memberNotification);
   }
 }
