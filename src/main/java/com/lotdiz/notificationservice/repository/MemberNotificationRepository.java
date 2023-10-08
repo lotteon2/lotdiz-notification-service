@@ -16,4 +16,8 @@ public interface MemberNotificationRepository
           + "join fetch mn.id.notification n "
           + "where mn.id.memberId = :memberId")
   List<MemberNotification> findAllByMemberId(@Param("memberId") Long memberId, Pageable pageable);
+
+  @Query(
+      "select count(noti) from MemberNotification noti where noti.id.memberId = :memberId and noti.memberNotificationIsRead=false ")
+  Long getUnreadNotificationCount(Long memberId);
 }
