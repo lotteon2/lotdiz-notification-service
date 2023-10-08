@@ -10,6 +10,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class SuccessResponse {
+
   private String code;
   private String message;
   private String detail;

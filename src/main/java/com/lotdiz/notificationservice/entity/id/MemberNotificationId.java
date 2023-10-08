@@ -2,11 +2,7 @@ package com.lotdiz.notificationservice.entity.id;
 
 import com.lotdiz.notificationservice.entity.Notification;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

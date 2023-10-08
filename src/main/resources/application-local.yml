@@ -13,10 +13,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-    show-sql: true
     generate-ddl: true
     # Bean이 생성되기 전에 ddl 실행
     defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
   h2:
     console:
       enabled: true
@@ -57,3 +59,17 @@ cloud:
       project-funding-amount-complete-notification-queue:
         name: LotdizProjectFundingAmountCompleteNotificationQueue
         url: ${AWS_SQS_ENDPOINT}/LotdizProjectFundingAmountCompleteNotificationQueue
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+      springframework:
+        jdbc:
+          core:
+            JdbcTemplate: DEBUG
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
