@@ -9,12 +9,12 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class SuccessResponse {
+public class SuccessResponse<T> {
 
   private String code;
   private String message;
   private String detail;
 
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-  private Object data;
+  private T data;
 }
