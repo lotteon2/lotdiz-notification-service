@@ -25,7 +25,6 @@ public class NotificationService {
 
   private final MemberNotificationRepository memberNotificationRepository;
   private final NotificationRepository notificationRepository;
-  private final MemberNotificationRepository memberNotificationRepository;
   private final MemberNotificationJdbcRepository memberNotificationJdbcRepository;
 
   @Transactional
