@@ -1,10 +1,12 @@
 package com.lotdiz.notificationservice.messagequeue;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotdiz.notificationservice.dto.CreateProjectDueDateNotificationRequestDto;
 import com.lotdiz.notificationservice.dto.CreateProjectFundingRateFailNotificationRequestDto;
 import com.lotdiz.notificationservice.service.NotificationService;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +32,11 @@ public class ProjectDueDateSqsListener {
       @Payload String message, @Headers Map<String, String> headers, Acknowledgment ack) {
     log.info("receive ProjectDueDateNotification message={}", message);
     try {
-      CreateProjectDueDateNotificationRequestDto createProjectDueDateNotificationRequestDto =
-          objectMapper.readValue(message, CreateProjectDueDateNotificationRequestDto.class);
+      List<CreateProjectDueDateNotificationRequestDto> createProjectDueDateNotificationRequestDtos =
+          objectMapper.readValue(message, new TypeReference<>() {});
 
-      notificationService.createProjectDueDateNotification(
-          createProjectDueDateNotificationRequestDto);
+      notificationService.createProjectDueDateNotifications(
+          createProjectDueDateNotificationRequestDtos);
 
       ack.acknowledge();
     } catch (JsonProcessingException e) {
@@ -49,15 +51,12 @@ public class ProjectDueDateSqsListener {
       @Payload String message, @Headers Map<String, String> headers, Acknowledgment ack) {
     log.info("receive ProjectFundingRateFailNotification message={}", message);
     try {
-      CreateProjectFundingRateFailNotificationRequestDto
-          createProjectFundingRateFailNotificationRequestDto =
-              objectMapper.readValue(
-                  message, CreateProjectFundingRateFailNotificationRequestDto.class);
+      List<CreateProjectFundingRateFailNotificationRequestDto>
+          createProjectFundingRateFailNotificationRequestDtos =
+              objectMapper.readValue(message, new TypeReference<>() {});
 
-      if (!createProjectFundingRateFailNotificationRequestDto.getIsSufficientFundingAmount()) {
-        notificationService.createProjectFundingRateFailNotification(
-            createProjectFundingRateFailNotificationRequestDto);
-      }
+      notificationService.createProjectFundingRateFailNotification(
+          createProjectFundingRateFailNotificationRequestDtos);
 
       ack.acknowledge();
     } catch (JsonProcessingException e) {
