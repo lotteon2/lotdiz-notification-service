@@ -25,20 +25,21 @@ public class NotificationRestController {
   private final MemberNotificationService memberNotificationService;
 
   @GetMapping("/notifications")
-  public ResponseEntity<SuccessResponse> getNotificationDetails(
-      @RequestHeader(name = "memberId") Long memberId,
-      @PageableDefault(
-              page = 0,
-              size = 20,
-              sort = {"createdAt"},
-              direction = Sort.Direction.DESC)
-          Pageable pageable) {
+  public ResponseEntity<SuccessResponse<Map<String, List<GetNotificationDetailResponseDto>>>>
+      getNotificationDetails(
+          @RequestHeader(name = "memberId") Long memberId,
+          @PageableDefault(
+                  page = 0,
+                  size = 20,
+                  sort = {"createdAt"},
+                  direction = Sort.Direction.DESC)
+              Pageable pageable) {
     List<GetNotificationDetailResponseDto> getNotificationDetailResponseDtos =
         memberNotificationService.getNotificationDetails(memberId, pageable);
 
     return ResponseEntity.ok()
         .body(
-            SuccessResponse.builder()
+            SuccessResponse.<Map<String, List<GetNotificationDetailResponseDto>>>builder()
                 .code(String.valueOf(HttpStatus.OK.value()))
                 .message(HttpStatus.OK.name())
                 .detail("알림 조회 성공")
@@ -47,13 +48,13 @@ public class NotificationRestController {
   }
 
   @GetMapping("notifications/unread-count")
-  public ResponseEntity<SuccessResponse> numberOfUnreadNotifications() {
+  public ResponseEntity<SuccessResponse<Map<String, Long>>> numberOfUnreadNotifications() {
     Long memberId = 1L;
     Long numberOfUnreadNotifications =
         unreadNotificationService.getNumberOfUnreadNotifications(memberId);
     return ResponseEntity.ok()
         .body(
-            SuccessResponse.builder()
+            SuccessResponse.<Map<String, Long>>builder()
                 .code(String.valueOf(HttpStatus.OK.value()))
                 .data(Map.of("unreadNotificationCount", numberOfUnreadNotifications))
                 .message(HttpStatus.OK.name())
