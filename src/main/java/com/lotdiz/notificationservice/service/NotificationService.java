@@ -22,10 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class NotificationService {
-  private final MemberNotificationRepository memberNotificationRepository;
 
-  private final NotificationRepository notificationRepository;
   private final MemberNotificationRepository memberNotificationRepository;
+  private final NotificationRepository notificationRepository;
   private final MemberNotificationJdbcRepository memberNotificationJdbcRepository;
 
   @Transactional

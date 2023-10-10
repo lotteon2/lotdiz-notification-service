@@ -22,7 +22,7 @@ public class DeliveryStartSqsListener {
   private final NotificationService notificationService;
 
   @SqsListener(
-      value = "${cloud.aws.sqs.delivery-start-notification-queue.name}",
+      value = "${cloud.aws.sqs.delivery-status-notification-queue.name}",
       deletionPolicy = SqsMessageDeletionPolicy.NEVER)
   public void createDeliveryStartNotification(
       @Payload String message, @Headers Map<String, String> headers, Acknowledgment ack)

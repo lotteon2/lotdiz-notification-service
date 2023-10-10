@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotdiz.notificationservice.dto.CreateProjectDueDateNotificationRequestDto;
 import com.lotdiz.notificationservice.dto.CreateProjectFundingRateFailNotificationRequestDto;
 import com.lotdiz.notificationservice.service.NotificationService;
-
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,7 @@ public class ProjectDueDateSqsListener {
           objectMapper.readValue(message, new TypeReference<>() {});
 
       notificationService.createProjectDueDateNotifications(
-              createProjectDueDateNotificationRequestDtos);
+          createProjectDueDateNotificationRequestDtos);
 
       ack.acknowledge();
     } catch (JsonProcessingException e) {
@@ -54,11 +53,10 @@ public class ProjectDueDateSqsListener {
     try {
       List<CreateProjectFundingRateFailNotificationRequestDto>
           createProjectFundingRateFailNotificationRequestDtos =
-              objectMapper.readValue(
-                  message, new TypeReference<>() {});
+              objectMapper.readValue(message, new TypeReference<>() {});
 
       notificationService.createProjectFundingRateFailNotification(
-              createProjectFundingRateFailNotificationRequestDtos);
+          createProjectFundingRateFailNotificationRequestDtos);
 
       ack.acknowledge();
     } catch (JsonProcessingException e) {

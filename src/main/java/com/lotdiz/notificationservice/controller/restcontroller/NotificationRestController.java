@@ -22,7 +22,6 @@ public class NotificationRestController {
 
   private final MemberNotificationService memberNotificationService;
   private final UnreadNotificationService unreadNotificationService;
-  private final MemberNotificationService memberNotificationService;
 
   @GetMapping("/notifications")
   public ResponseEntity<SuccessResponse<Map<String, List<GetNotificationDetailResponseDto>>>>
@@ -59,28 +58,6 @@ public class NotificationRestController {
                 .data(Map.of("unreadNotificationCount", numberOfUnreadNotifications))
                 .message(HttpStatus.OK.name())
                 .detail("안 읽은 알림 개수")
-                .build());
-  }
-
-  @GetMapping("/notifications")
-  public ResponseEntity<SuccessResponse> getNotificationDetails(
-      @RequestHeader(name = "memberId") Long memberId,
-      @PageableDefault(
-              page = 0,
-              size = 20,
-              sort = {"createdAt"},
-              direction = Sort.Direction.DESC)
-          Pageable pageable) {
-    List<GetNotificationDetailResponseDto> getNotificationDetailResponseDtos =
-        memberNotificationService.getNotificationDetails(memberId, pageable);
-
-    return ResponseEntity.ok()
-        .body(
-            SuccessResponse.builder()
-                .code(String.valueOf(HttpStatus.OK.value()))
-                .message(HttpStatus.OK.name())
-                .detail("알림 조회 성공")
-                .data(Map.of("notifications", getNotificationDetailResponseDtos))
                 .build());
   }
 }
