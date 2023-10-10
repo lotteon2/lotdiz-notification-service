@@ -3,8 +3,8 @@ package com.lotdiz.notificationservice.messagequeue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lotdiz.notificationservice.dto.CreateProjectDueDateNotificationRequestDto;
-import com.lotdiz.notificationservice.dto.CreateProjectFundingRateFailNotificationRequestDto;
+import com.lotdiz.notificationservice.dto.request.CreateProjectDueDateNotificationRequestDto;
+import com.lotdiz.notificationservice.dto.request.CreateProjectFundingRateFailNotificationRequestDto;
 import com.lotdiz.notificationservice.service.NotificationService;
 
 import java.util.List;
