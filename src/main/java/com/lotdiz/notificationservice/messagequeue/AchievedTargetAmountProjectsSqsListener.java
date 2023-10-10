@@ -29,7 +29,6 @@ public class AchievedTargetAmountProjectsSqsListener {
       throws JsonProcessingException {
     TargetAmountAchievedProjectsDto targetAmountAchievedProjectsDtos =
         objectMapper.readValue(message, TargetAmountAchievedProjectsDto.class);
-    // TODO: 여기서 부터 다시 - 알림 저장하고 사용자 알림 등록 해야 함
     ack.acknowledge();
 
     achievedTargetAmountProjectsNotificationService.createAchievedTargetAmountProjectNotification(
