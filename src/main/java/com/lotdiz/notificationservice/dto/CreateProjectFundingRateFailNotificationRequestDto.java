@@ -9,7 +9,9 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateProjectFundingRateFailNotificationRequestDto {
 
+  private Long projectId;
   private String projectName;
-  private Boolean isSufficientFundingAmount;
+  private Long makerMemberId;
+  private Boolean isTargetAmountExceed;
   private List<Long> memberIds;
 }
