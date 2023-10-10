@@ -8,6 +8,7 @@ import com.lotdiz.notificationservice.entity.id.MemberNotificationId;
 import com.lotdiz.notificationservice.repository.MemberNotificationJdbcRepository;
 import com.lotdiz.notificationservice.repository.MemberNotificationRepository;
 import com.lotdiz.notificationservice.repository.NotificationRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class NotificationService {
   public void createProjectDueDateNotifications(
       List<CreateProjectDueDateNotificationRequestDto>
           createProjectDueDateNotificationRequestDtos) {
+    List<MemberNotification> totalMemberNotifications = new ArrayList<>();
     createProjectDueDateNotificationRequestDtos.forEach(
         pddn -> {
           String projectName = pddn.getProjectName();
@@ -54,7 +56,7 @@ public class NotificationService {
                               .build())
                   .collect(Collectors.toList());
 
-          memberNotificationJdbcRepository.batchInsert(memberNotifications);
+          totalMemberNotifications.addAll(memberNotifications);
 
           MemberNotification makerMemberNotification =
               MemberNotification.builder()
@@ -65,14 +67,18 @@ public class NotificationService {
                           .build())
                   .build();
 
-          memberNotificationRepository.save(makerMemberNotification);
+          totalMemberNotifications.add(makerMemberNotification);
         });
+
+    memberNotificationJdbcRepository.batchInsert(totalMemberNotifications);
   }
 
   @Transactional
   public void createProjectFundingRateFailNotification(
       List<CreateProjectFundingRateFailNotificationRequestDto>
           createProjectFundingRateFailNotificationRequestDtos) {
+
+    List<MemberNotification> totalMemberNotifications = new ArrayList<>();
     createProjectFundingRateFailNotificationRequestDtos.forEach(
         pfrfn -> {
           if (!pfrfn.getIsTargetAmountExceed()) {
@@ -100,7 +106,7 @@ public class NotificationService {
                                 .build())
                     .collect(Collectors.toList());
 
-            memberNotificationJdbcRepository.batchInsert(memberNotifications);
+            totalMemberNotifications.addAll(memberNotifications);
 
             MemberNotification makerMemberNotification =
                 MemberNotification.builder()
@@ -111,8 +117,10 @@ public class NotificationService {
                             .build())
                     .build();
 
-            memberNotificationRepository.save(makerMemberNotification);
+            totalMemberNotifications.add(makerMemberNotification);
           }
         });
+
+    memberNotificationJdbcRepository.batchInsert(totalMemberNotifications);
   }
 }
