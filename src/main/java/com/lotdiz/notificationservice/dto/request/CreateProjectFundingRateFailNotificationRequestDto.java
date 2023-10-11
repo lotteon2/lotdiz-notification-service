@@ -1,4 +1,4 @@
-package com.lotdiz.notificationservice.dto;
+package com.lotdiz.notificationservice.dto.request;
 
 import java.util.List;
 import lombok.*;
@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CreateProjectDueDateNotificationRequestDto {
+public class CreateProjectFundingRateFailNotificationRequestDto {
 
   private Long projectId;
   private String projectName;
