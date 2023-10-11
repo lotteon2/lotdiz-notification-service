@@ -1,7 +1,7 @@
 package com.lotdiz.notificationservice.service;
 
-import com.lotdiz.notificationservice.dto.CreateProjectDueDateNotificationRequestDto;
-import com.lotdiz.notificationservice.dto.CreateProjectFundingRateFailNotificationRequestDto;
+import com.lotdiz.notificationservice.dto.request.CreateProjectDueDateNotificationRequestDto;
+import com.lotdiz.notificationservice.dto.request.CreateProjectFundingRateFailNotificationRequestDto;
 import com.lotdiz.notificationservice.dto.request.DeliveryStartNotificationRequestDto;
 import com.lotdiz.notificationservice.entity.MemberNotification;
 import com.lotdiz.notificationservice.entity.Notification;
