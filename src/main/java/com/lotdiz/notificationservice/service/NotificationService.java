@@ -128,6 +128,8 @@ public class NotificationService {
   @Transactional
   public void createDeliveryStartNotification(
       DeliveryStartNotificationRequestDto deliveryStartNotificationRequestDto) {
+
+    // notification 생성
     Notification notification =
         Notification.builder()
             .notificationTitle("배송 시작 알림")
@@ -139,6 +141,7 @@ public class NotificationService {
             .build();
     Notification savedNotification = notificationRepository.save(notification);
 
+    // member notification 셍성
     MemberNotification memberNotification =
         MemberNotification.builder()
             .id(
@@ -147,6 +150,7 @@ public class NotificationService {
                     .notification(savedNotification)
                     .build())
             .build();
+
     memberNotificationRepository.save(memberNotification);
   }
 }
