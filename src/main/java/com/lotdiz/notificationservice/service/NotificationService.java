@@ -1,12 +1,11 @@
 package com.lotdiz.notificationservice.service;
 
-import com.lotdiz.notificationservice.dto.CreateProjectDueDateNotificationRequestDto;
-import com.lotdiz.notificationservice.dto.CreateProjectFundingRateFailNotificationRequestDto;
+import com.lotdiz.notificationservice.dto.request.CreateProjectDueDateNotificationRequestDto;
+import com.lotdiz.notificationservice.dto.request.CreateProjectFundingRateFailNotificationRequestDto;
 import com.lotdiz.notificationservice.entity.MemberNotification;
 import com.lotdiz.notificationservice.entity.Notification;
 import com.lotdiz.notificationservice.entity.id.MemberNotificationId;
 import com.lotdiz.notificationservice.repository.MemberNotificationJdbcRepository;
-import com.lotdiz.notificationservice.repository.MemberNotificationRepository;
 import com.lotdiz.notificationservice.repository.NotificationRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class NotificationService {
-  private final MemberNotificationRepository memberNotificationRepository;
 
   private final NotificationRepository notificationRepository;
   private final MemberNotificationJdbcRepository memberNotificationJdbcRepository;
