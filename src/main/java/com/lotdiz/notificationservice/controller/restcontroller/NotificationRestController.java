@@ -48,8 +48,8 @@ public class NotificationRestController {
   }
 
   @GetMapping("/notifications/unread-count")
-  public ResponseEntity<SuccessResponse<Map<String, Long>>> numberOfUnreadNotifications() {
-    Long memberId = 1L;
+  public ResponseEntity<SuccessResponse<Map<String, Long>>> numberOfUnreadNotifications(
+      @RequestHeader Long memberId) {
     Long numberOfUnreadNotifications =
         unreadNotificationService.getNumberOfUnreadNotifications(memberId);
     return ResponseEntity.ok()
