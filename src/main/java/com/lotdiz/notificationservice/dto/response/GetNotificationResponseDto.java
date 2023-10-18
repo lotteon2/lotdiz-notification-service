@@ -5,9 +5,7 @@ import lombok.*;
 
 @Getter
 @Builder
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GetNotificationDetailResponseDto {
+public class GetNotificationResponseDto {
 
   private Long notificationId;
   private String notificationTitle;

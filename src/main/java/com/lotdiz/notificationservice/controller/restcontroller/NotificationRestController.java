@@ -1,12 +1,15 @@
 package com.lotdiz.notificationservice.controller.restcontroller;
 
-import com.lotdiz.notificationservice.dto.response.GetNotificationDetailResponseDto;
+import com.lotdiz.notificationservice.dto.response.GetNotificationResponseDto;
+import com.lotdiz.notificationservice.entity.MemberNotification;
+import com.lotdiz.notificationservice.mapper.MemberNotificationCustomMapper;
 import com.lotdiz.notificationservice.service.MemberNotificationService;
 import com.lotdiz.notificationservice.service.UnreadNotificationService;
 import com.lotdiz.notificationservice.utils.SuccessResponse;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -21,29 +24,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class NotificationRestController {
+
   private final MemberNotificationService memberNotificationService;
   private final UnreadNotificationService unreadNotificationService;
 
+  private final MemberNotificationCustomMapper memberNotificationCustomMapper;
+
   @GetMapping("/notifications")
-  public ResponseEntity<SuccessResponse<Map<String, List<GetNotificationDetailResponseDto>>>>
-      getNotificationDetails(
-          @RequestHeader(name = "memberId") Long memberId,
-          @PageableDefault(
-                  page = 0,
-                  size = 20,
-                  sort = {"createdAt"},
-                  direction = Sort.Direction.DESC)
-              Pageable pageable) {
-    List<GetNotificationDetailResponseDto> getNotificationDetailResponseDtos =
-        memberNotificationService.getNotificationDetails(memberId, pageable);
+  public ResponseEntity<SuccessResponse<Map<String, Object>>> getNotificationDetails(
+      @RequestHeader(name = "memberId") Long memberId,
+      @PageableDefault(
+              page = 0,
+              size = 5,
+              sort = {"createdAt"},
+              direction = Sort.Direction.DESC)
+          Pageable pageable) {
+    Page<MemberNotification> memberNotifications =
+        memberNotificationService.getMemberNotifications(memberId, pageable);
+    int totalPages = memberNotifications.getTotalPages();
+    List<GetNotificationResponseDto> getNotificationResponseDtos =
+        memberNotificationCustomMapper.memberNotificationsToGetNotificationResponseDtos(
+            memberNotifications.getContent());
 
     return ResponseEntity.ok()
         .body(
-            SuccessResponse.<Map<String, List<GetNotificationDetailResponseDto>>>builder()
+            SuccessResponse.<Map<String, Object>>builder()
                 .code(String.valueOf(HttpStatus.OK.value()))
                 .message(HttpStatus.OK.name())
                 .detail("알림 조회 성공")
-                .data(Map.of("notifications", getNotificationDetailResponseDtos))
+                .data(
+                    Map.of("totalPages", totalPages, "notifications", getNotificationResponseDtos))
                 .build());
   }
 
