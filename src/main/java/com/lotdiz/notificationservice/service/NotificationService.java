@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,24 +40,13 @@ public class NotificationService {
     List<Notification> totalNotifications = new ArrayList<>();
     createProjectDueDateNotificationRequestDtos.forEach(
         pddn -> {
-          List<MemberNotification> memberNotifications =
-              pddn.getMemberIds().stream()
-                  .map(
-                      memberId ->
-                          MemberNotification.createMemberNotification(
-                              MemberNotificationId.createMemberNotificationId(memberId)))
-                  .collect(Collectors.toList());
-
-          memberNotifications.add(
-              MemberNotification.createMemberNotification(
-                  MemberNotificationId.createMemberNotificationId(pddn.getMakerMemberId())));
-
           String projectName = pddn.getProjectName();
           Notification notification =
-              Notification.createNotification(
+              createNotification(
                   String.format(PROJECT_DUE_DATE_TITLE_FORMAT, projectName),
                   String.format(PROJECT_DUE_DATE_CONTENT_FORMAT, projectName),
-                  memberNotifications);
+                  pddn.getMemberIds(),
+                  pddn.getMakerMemberId());
 
           totalNotifications.add(notification);
         });
@@ -73,24 +63,13 @@ public class NotificationService {
     createProjectFundingRateFailNotificationRequestDtos.forEach(
         pfrfn -> {
           if (!pfrfn.getIsTargetAmountExceed()) {
-            List<MemberNotification> memberNotifications =
-                pfrfn.getMemberIds().stream()
-                    .map(
-                        memberId ->
-                            MemberNotification.createMemberNotification(
-                                MemberNotificationId.createMemberNotificationId(memberId)))
-                    .collect(Collectors.toList());
-
-            memberNotifications.add(
-                MemberNotification.createMemberNotification(
-                    MemberNotificationId.createMemberNotificationId(pfrfn.getMakerMemberId())));
-
             String projectName = pfrfn.getProjectName();
             Notification notification =
-                Notification.createNotification(
+                createNotification(
                     String.format(PROJECT_FUNDING_RATE_FAIL_TITLE_FORMAT, projectName),
                     String.format(PROJECT_FUNDING_RATE_FAIL_CONTENT_FORMAT, projectName),
-                    memberNotifications);
+                    pfrfn.getMemberIds(),
+                    pfrfn.getMakerMemberId());
 
             totalNotifications.add(notification);
           }
@@ -128,5 +107,29 @@ public class NotificationService {
             .build();
 
     memberNotificationRepository.save(memberNotification);
+  }
+
+  @NotNull
+  private static Notification createNotification(
+      String notificationTitle,
+      String notificationContent,
+      List<Long> memberIds,
+      Long makerMemberId) {
+    List<MemberNotification> memberNotifications =
+        memberIds.stream()
+            .map(
+                memberId ->
+                    MemberNotification.createMemberNotification(
+                        MemberNotificationId.createMemberNotificationId(memberId)))
+            .collect(Collectors.toList());
+
+    memberNotifications.add(
+        MemberNotification.createMemberNotification(
+            MemberNotificationId.createMemberNotificationId(makerMemberId)));
+
+    Notification notification =
+        Notification.createNotification(
+            notificationTitle, notificationContent, memberNotifications);
+    return notification;
   }
 }
