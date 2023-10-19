@@ -6,7 +6,6 @@ import com.lotdiz.notificationservice.dto.request.DeliveryStartNotificationReque
 import com.lotdiz.notificationservice.entity.MemberNotification;
 import com.lotdiz.notificationservice.entity.Notification;
 import com.lotdiz.notificationservice.entity.id.MemberNotificationId;
-import com.lotdiz.notificationservice.repository.MemberNotificationJdbcRepository;
 import com.lotdiz.notificationservice.repository.MemberNotificationRepository;
 import com.lotdiz.notificationservice.repository.NotificationRepository;
 import java.util.ArrayList;
@@ -23,55 +22,46 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class NotificationService {
 
+  private static final String PROJECT_DUE_DATE_TITLE_FORMAT = "프로젝트[%s] 마감 알림";
+  private static final String PROJECT_DUE_DATE_CONTENT_FORMAT = "프로젝트[%s] 마감 알림";
+  private static final String PROJECT_FUNDING_RATE_FAIL_TITLE_FORMAT = "프로젝트[%s] 펀딩 미달성 알림";
+  private static final String PROJECT_FUNDING_RATE_FAIL_CONTENT_FORMAT =
+      "프로젝트[%s]의 펀딩 달성률이 미달성으로 실패하였습니다.";
+
   private final MemberNotificationRepository memberNotificationRepository;
   private final NotificationRepository notificationRepository;
-  private final MemberNotificationJdbcRepository memberNotificationJdbcRepository;
 
   @Transactional
   public void createProjectDueDateNotifications(
       List<CreateProjectDueDateNotificationRequestDto>
           createProjectDueDateNotificationRequestDtos) {
-    List<MemberNotification> totalMemberNotifications = new ArrayList<>();
+
+    List<Notification> totalNotifications = new ArrayList<>();
     createProjectDueDateNotificationRequestDtos.forEach(
         pddn -> {
-          String projectName = pddn.getProjectName();
-
-          Notification notification =
-              Notification.builder()
-                  .notificationTitle(String.format("프로젝트[%s] 마감 알림", projectName))
-                  .notificationContent(String.format("프로젝트[%s]가 마감되었습니다.", projectName))
-                  .build();
-
-          Notification savedNotification = notificationRepository.save(notification);
-
           List<MemberNotification> memberNotifications =
               pddn.getMemberIds().stream()
                   .map(
                       memberId ->
-                          MemberNotification.builder()
-                              .id(
-                                  MemberNotificationId.builder()
-                                      .notification(savedNotification)
-                                      .memberId(memberId)
-                                      .build())
-                              .build())
+                          MemberNotification.createMemberNotification(
+                              MemberNotificationId.createMemberNotificationId(memberId)))
                   .collect(Collectors.toList());
 
-          totalMemberNotifications.addAll(memberNotifications);
+          memberNotifications.add(
+              MemberNotification.createMemberNotification(
+                  MemberNotificationId.createMemberNotificationId(pddn.getMakerMemberId())));
 
-          MemberNotification makerMemberNotification =
-              MemberNotification.builder()
-                  .id(
-                      MemberNotificationId.builder()
-                          .notification(savedNotification)
-                          .memberId(pddn.getMakerMemberId())
-                          .build())
-                  .build();
+          String projectName = pddn.getProjectName();
+          Notification notification =
+              Notification.createNotification(
+                  String.format(PROJECT_DUE_DATE_TITLE_FORMAT, projectName),
+                  String.format(PROJECT_DUE_DATE_CONTENT_FORMAT, projectName),
+                  memberNotifications);
 
-          totalMemberNotifications.add(makerMemberNotification);
+          totalNotifications.add(notification);
         });
 
-    memberNotificationJdbcRepository.batchInsert(totalMemberNotifications);
+    notificationRepository.saveAll(totalNotifications);
   }
 
   @Transactional
@@ -79,50 +69,36 @@ public class NotificationService {
       List<CreateProjectFundingRateFailNotificationRequestDto>
           createProjectFundingRateFailNotificationRequestDtos) {
 
-    List<MemberNotification> totalMemberNotifications = new ArrayList<>();
+    List<Notification> totalNotifications = new ArrayList<>();
     createProjectFundingRateFailNotificationRequestDtos.forEach(
         pfrfn -> {
           if (!pfrfn.getIsTargetAmountExceed()) {
-            String projectName = pfrfn.getProjectName();
-
-            Notification notification =
-                Notification.builder()
-                    .notificationTitle(String.format("프로젝트[%s] 펀딩 미달성 알림", projectName))
-                    .notificationContent(
-                        String.format("프로젝트[%s]의 펀딩 달성률이 미달성으로 실패하였습니다.", projectName))
-                    .build();
-
-            Notification savedNotification = notificationRepository.save(notification);
-
             List<MemberNotification> memberNotifications =
                 pfrfn.getMemberIds().stream()
                     .map(
                         memberId ->
-                            MemberNotification.builder()
-                                .id(
-                                    MemberNotificationId.builder()
-                                        .notification(savedNotification)
-                                        .memberId(memberId)
-                                        .build())
-                                .build())
+                            MemberNotification.createMemberNotification(
+                                MemberNotificationId.createMemberNotificationId(memberId)))
                     .collect(Collectors.toList());
 
-            totalMemberNotifications.addAll(memberNotifications);
+            memberNotifications.add(
+                MemberNotification.createMemberNotification(
+                    MemberNotificationId.createMemberNotificationId(pfrfn.getMakerMemberId())));
 
-            MemberNotification makerMemberNotification =
-                MemberNotification.builder()
-                    .id(
-                        MemberNotificationId.builder()
-                            .notification(savedNotification)
-                            .memberId(pfrfn.getMakerMemberId())
-                            .build())
-                    .build();
+            String projectName = pfrfn.getProjectName();
+            Notification notification =
+                Notification.createNotification(
+                    String.format(PROJECT_FUNDING_RATE_FAIL_TITLE_FORMAT, projectName),
+                    String.format(PROJECT_FUNDING_RATE_FAIL_CONTENT_FORMAT, projectName),
+                    memberNotifications);
 
-            totalMemberNotifications.add(makerMemberNotification);
+            totalNotifications.add(notification);
           }
         });
 
-    memberNotificationJdbcRepository.batchInsert(totalMemberNotifications);
+    if (!totalNotifications.isEmpty()) {
+      notificationRepository.saveAll(totalNotifications);
+    }
   }
 
   @Transactional
