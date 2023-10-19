@@ -12,22 +12,22 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class AWSSqsConfig {
 
-    @Value("${cloud.aws.credentials.ACCESS_KEY_ID}")
-    private String accessKeyId;
+  @Value("${cloud.aws.credentials.ACCESS_KEY_ID}")
+  private String accessKeyId;
 
-    @Value("${cloud.aws.credentials.SECRET_ACCESS_KEY}")
-    private String secretAccessKey;
+  @Value("${cloud.aws.credentials.SECRET_ACCESS_KEY}")
+  private String secretAccessKey;
 
-    @Value("${cloud.aws.region.static}")
-    private String region;
+  @Value("${cloud.aws.region.static}")
+  private String region;
 
-    @Primary
-    @Bean
-    public AmazonSQSAsync amazonSQSAsync() {
-        BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(accessKeyId, secretAccessKey);
-        return AmazonSQSAsyncClientBuilder.standard()
-                .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(basicAWSCredentials))
-                .build();
-    }
+  @Primary
+  @Bean
+  public AmazonSQSAsync amazonSQSAsync() {
+    BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(accessKeyId, secretAccessKey);
+    return AmazonSQSAsyncClientBuilder.standard()
+        .withRegion(region)
+        .withCredentials(new AWSStaticCredentialsProvider(basicAWSCredentials))
+        .build();
+  }
 }

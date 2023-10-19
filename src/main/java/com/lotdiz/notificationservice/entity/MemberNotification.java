@@ -5,6 +5,8 @@ import com.lotdiz.notificationservice.entity.id.MemberNotificationId;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,4 +32,13 @@ public class MemberNotification extends BaseEntity {
       nullable = false,
       columnDefinition = "boolean default false")
   private Boolean memberNotificationIsRead = false;
+
+  public static MemberNotification createMemberNotification(
+      MemberNotificationId memberNotificationId) {
+    return MemberNotification.builder().id(memberNotificationId).build();
+  }
+
+  public void setNotification(Notification notification) {
+    this.id.setNotification(notification);
+  }
 }

@@ -26,4 +26,12 @@ public class MemberNotificationId implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "notification_id")
   private Notification notification;
+
+  public static MemberNotificationId createMemberNotificationId(Long memberId) {
+    return MemberNotificationId.builder().memberId(memberId).build();
+  }
+
+  public void setNotification(Notification notification) {
+    this.notification = notification;
+  }
 }
