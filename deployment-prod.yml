@@ -28,7 +28,7 @@ spec:
         profile: prod
     spec:
       containers:
-        - name: notification-deployment
+        - name: notification-service
           image: ${ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${IMAGE_TAG}
           imagePullPolicy: IfNotPresent
         - name: mysql
