@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: notification-efs-claim
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "notification-efs-sc"
+  resources:
+    requests:
+      storage: 5Gi
