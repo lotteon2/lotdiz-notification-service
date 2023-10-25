@@ -39,14 +39,14 @@ spec:
             - name: MYSQL_DATABASE
               value: delivery-service
           volumeMounts:
-            - name: lotdiz-storage
+            - name: lotdiz-notification-storage
               mountPath: /var/lib/mysql
           resources:
             requests:
               memory: "2Gi"
       volumes:
-        - name: lotdiz-storage
+        - name: lotdiz-notification-storage
           persistentVolumeClaim:
-            claimName: efs-claim
+            claimName: notification-efs-claim
       restartPolicy: Always
 
