@@ -1,5 +1,6 @@
 package com.lotdiz.notificationservice.controller.restcontroller;
 
+import com.lotdiz.notificationservice.dto.request.SetNotificationReadRequestDto;
 import com.lotdiz.notificationservice.dto.response.GetNotificationResponseDto;
 import com.lotdiz.notificationservice.entity.MemberNotification;
 import com.lotdiz.notificationservice.mapper.MemberNotificationCustomMapper;
@@ -66,6 +67,23 @@ public class NotificationRestController {
                 .data(Map.of("unreadNotificationCount", numberOfUnreadNotifications))
                 .message(HttpStatus.OK.name())
                 .detail("안 읽은 알림 개수")
+                .build());
+  }
+
+  @PutMapping("/notifications/read-status")
+  public ResponseEntity<SuccessResponse<Object>> setNotificationReadStatus(
+      @RequestHeader Long memberId,
+      @RequestBody SetNotificationReadRequestDto setNotificationReadRequestDto) {
+    memberNotificationService.setMemberNotificationIsReadByIdIsIn(
+        memberId, setNotificationReadRequestDto.getNotificationIds());
+
+    return ResponseEntity.ok()
+        .body(
+            SuccessResponse.builder()
+                .code(String.valueOf(HttpStatus.OK.value()))
+                .message(HttpStatus.OK.name())
+                .detail("알림 읽음처리 완료")
+                .data(null)
                 .build());
   }
 }
