@@ -41,6 +41,8 @@ spec:
           volumeMounts:
             - name: lotdiz-notification-storage
               mountPath: /var/lib/mysql
+            - name: mysql-config
+              mountPath: /etc/mysql/conf.d
           resources:
             requests:
               memory: "2Gi"
@@ -48,5 +50,8 @@ spec:
         - name: lotdiz-notification-storage
           persistentVolumeClaim:
             claimName: notification-efs-claim
+        - name: mysql-config
+          configMap:
+            name: mysql-config
       restartPolicy: Always
 
