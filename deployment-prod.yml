@@ -45,7 +45,7 @@ spec:
               mountPath: /etc/mysql/conf.d
           resources:
             requests:
-              memory: "2Gi"
+              memory: "1Gi"
       volumes:
         - name: lotdiz-notification-storage
           persistentVolumeClaim:
